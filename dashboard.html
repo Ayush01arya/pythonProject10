@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -13,28 +14,108 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
-        <p class="text-gray-600">Welcome to your dashboard!</p>
-      <button onclick="logout()">Logout</button>
-        <!-- Your Dashboard Content Here -->
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="logo.png" alt="Company Logo" class="w-10 h-10">
+                <h1 class="text-lg font-semibold text-gray-800">GEyan</h1>
+            </div>
+            <div class="space-x-6">
+                <button onclick="showSection('home')" class="text-gray-700 hover:text-gray-900 font-medium">Home</button>
+                <button onclick="showSection('profile')" class="text-gray-700 hover:text-gray-900 font-medium">Profile</button>
+                <button onclick="showSection('askMe')" class="text-gray-700 hover:text-gray-900 font-medium">Ask Me</button>
+                <button onclick="showSection('answer')" class="text-gray-700 hover:text-gray-900 font-medium">Answer</button>
+                <button onclick="logout()" class="text-red-500 hover:text-red-700 font-medium">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-6">
+        <!-- Home Section -->
+        <div id="home" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Home</h2>
+            <canvas id="homeChart" class="bg-white p-4 shadow rounded-lg"></canvas>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Profile</h2>
+            <p class="text-gray-600">This is the Profile section. Add user details or edit options here.</p>
+        </div>
+
+        <!-- Ask Me Section -->
+        <div id="askMe" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ask Me</h2>
+            <p class="text-gray-600">This is the Ask Me section. Add your question submission form here.</p>
+        </div>
+
+        <!-- Answer Section -->
+        <div id="answer" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Answer</h2>
+            <p class="text-gray-600">This is the Answer section. Display answers or manage questions here.</p>
+        </div>
     </div>
 
-
-<script>
-    function logout() {
-        // Remove the authentication token from localStorage
-        localStorage.removeItem('authToken');
-        window.location.href = 'login.html'; // Redirect to login page
-    }
-</script>
-
     <script>
-        // Check if the user is logged in by checking the presence of the auth token in localStorage
+        // Show the default section (Home) on load
+        document.getElementById('home').classList.remove('hidden');
+
+        // Function to switch between sections
+        function showSection(sectionId) {
+            const sections = ['home', 'profile', 'askMe', 'answer'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // If home is selected, render the graph
+            if (sectionId === 'home') {
+                renderGraph();
+            }
+        }
+
+        // Function to render the graph in Home section
+        function renderGraph() {
+            const ctx = document.getElementById('homeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                    datasets: [{
+                        label: 'Data',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        }
+
+        // Authentication check
         const authToken = localStorage.getItem('authToken');
         if (!authToken) {
-            // If no token, redirect to login page
             window.location.href = 'login.html';
         }
     </script>
