@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
+        <p class="text-gray-600">Welcome to your dashboard!</p>
+      <button onclick="logout()">Logout</button>
+        <!-- Your Dashboard Content Here -->
+    </div>
+
+
+<script>
+    function logout() {
+        // Remove the authentication token from localStorage
+        localStorage.removeItem('authToken');
+        window.location.href = 'login.html'; // Redirect to login page
+    }
+</script>
+
+    <script>
+        // Check if the user is logged in by checking the presence of the auth token in localStorage
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            // If no token, redirect to login page
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

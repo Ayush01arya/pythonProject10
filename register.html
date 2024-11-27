@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Register</h1>
+        <form id="registerForm">
+            <div class="space-y-4">
+                <input type="text" id="regUsername" placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required><br>
+                <input type="email" id="regemail_id" placeholder="Email - ID" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required><br>
+                <input type="text" id="regschool_name" placeholder="School Name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required><br>
+                <input type="tel" id="regmobile" placeholder="Mobile Number" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required><br>
+
+
+                <input type="password" id="regPassword" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required><br>
+                <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Register</button>
+            </div>
+        </form>
+        <p class="text-center text-gray-600 mt-4">Already have an account?
+            <a href="login.html" class="text-blue-500 hover:underline">Login here</a>.
+        </p>
+    </div>
+
+    <script>
+       document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('regUsername').value;
+    const password = document.getElementById('regPassword').value;
+    const email_id = document.getElementById('regemail_id').value;
+    const school_name = document.getElementById('regschool_name').value;
+    const mobile_number = document.getElementById('regmobile').value;
+
+    // Sending all required fields in the request
+    const response = await fetch('http://127.0.0.1:5000/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, email_id, school_name, mobile_number }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        alert(data.message);
+        window.location.href = 'login.html'; // Redirect to login
+    } else {
+        alert(data.error);
+    }
+});
+
+    </script>
+</body>
+</html>
